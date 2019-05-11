@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>ng-quiz</title>
+  </head>
+  <body>
+    <h1>Ng-quiz</h1>
+    <h3>Question 1 - Does HTML compiles ?</h3>
+    <input type="button" value="Yes" onclick="selectYes()"/>
+    <input type="button" value="No" onclick="selectNo()"/>
+  </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+  <script>
+      (()=>{
+          function selectYes(){
+
+          }
+          function selectNo(){
+
+          }
+          var socket = io.connect("http://127.0.0.1:4000");
+          if(socket){
+              console.log("connected to socket");
+              socket.on("output",(data)=>{
+                  console.log(data);
+              })
+          }
+      })();
+  </script>
+</html>
