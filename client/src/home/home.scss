@@ -1,8 +1,13 @@
+@import "./../index.scss";
 .home-section {
   width: 300px;
   margin: 0 auto;
 }
 
 .submit-btn {
-    
+}
+@include media-breakpoint-up(md) {
+  .home-section {
+    width: 450px;
+  }
 }

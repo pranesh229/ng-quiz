@@ -1,4 +1,14 @@
-.answer-button{
-    width: 42%;
-    margin: 10px;
+@import "./../index.scss";
+.quiz-section {
+  width: 300px;
+  margin: 0 auto;
+}
+.answer-button {
+  width: 42%;
+  margin: 10px;
+}
+@include media-breakpoint-up(md) {
+  .quiz-section {
+    width: 450px;
+  }
 }

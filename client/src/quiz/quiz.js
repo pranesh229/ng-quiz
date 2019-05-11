@@ -6,7 +6,7 @@ import Rank from "./rank/rank";
 export default class Quiz extends Component {
   render() {
     return (
-      <div>
+      <div className="quiz-section">
         <Question />
         <Button
           color="primary"
