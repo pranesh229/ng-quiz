@@ -49,7 +49,13 @@ export default class Home extends Component {
   submitYourName() {
     if (this.state.name) {
       console.log(this.state.name);
-      sessionStorage.setItem("name", this.state.name);
+      sessionStorage.setItem(
+        "user",
+        JSON.stringify({
+          name: this.state.name,
+          userid: Math.floor(Math.random() * 10000000 + 1)
+        })
+      );
       this.props.history.push("./quiz");
     } else {
       this.setState({ invalid: true });

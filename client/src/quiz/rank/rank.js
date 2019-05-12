@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import "./rank.scss";
 export default class Rank extends Component {
   render() {
+
+    
     return (
       <div className="text-center">
         <h4>Current Rank</h4>

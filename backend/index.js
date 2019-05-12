@@ -14,27 +14,39 @@ mongo.MongoClient.connect(url, (err, client) => {
 
   const db = client.db("quiz");
 
-  io.on("connection", (socket) => {
-    let quizAnswers = db.collection("questions");
+  io.on("connection", socket => {
+    let questionCollection = db.collection("questions");
+    let answerCollection = db.collection("answers");
     let sendStatus = s => {
-        socket.emit("status", s);
+      socket.emit("status", s);
     };
 
-    quizAnswers.find().toArray((error, result) => {
+    questionCollection.find().toArray((error, result) => {
       if (error) {
         throw error;
       }
       console.log(result);
-      socket.emit("output", result);
+      socket.emit("questions", result);
     });
-    socket.on("input", data => {
+
+    answerCollection
+      .find({ question: "Does HTML compile ?" })
+      .toArray((error, result) => {
+        if (error) {
+          throw error;
+        }
+        console.log("answers-->" + JSON.stringify(result));
+      });
+    socket.on("submit Answer", data => {
       let question = data.question;
       let answer = data.answer;
+      let userid = data.userid;
       if (question && answer) {
-        quizAnswers.insert(
+        answerCollection.insert(
           {
             question: question,
-            answer: answer
+            answer: answer,
+            userid: userid
           },
           () => {
             io.emit("output", [data]);
@@ -49,5 +61,5 @@ mongo.MongoClient.connect(url, (err, client) => {
       }
     });
   });
-//   client.close();
+  //   client.close();
 });
