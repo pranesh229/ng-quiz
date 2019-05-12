@@ -18,8 +18,8 @@ export default class Quiz extends Component {
       socket.on("questions", data => {
         console.log(data);
         this.setState({
-          questions: data[0].questions,
-          currentQuestion: data[0].questions[0]
+          questions: data.questions,
+          currentQuestion: data.questions[0]
         });
       });
     }
@@ -57,13 +57,23 @@ export default class Quiz extends Component {
   submitYes() {
     let user = JSON.parse(sessionStorage.getItem("user"));
     socket.emit("submit Answer", {
+      questionIndex: this.state.currentIndex,
       question: this.state.currentQuestion,
-      answer: "yes",
+      answer: "Yes",
       userid: user.userid
     });
     this.nextQuestion();
   }
-  submitNo() {}
+  submitNo() {
+    let user = JSON.parse(sessionStorage.getItem("user"));
+    socket.emit("submit Answer", {
+      questionIndex: this.state.currentIndex,
+      question: this.state.currentQuestion,
+      answer: "No",
+      userid: user.userid
+    });
+    this.nextQuestion();
+  }
   nextQuestion() {
     if (this.state.currentIndex < this.state.questions.length - 1) {
       this.setState({

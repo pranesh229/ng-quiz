@@ -8,15 +8,24 @@ import * as assert from "assert";
 // let testTwo = new TestTwo();
 const io = socketio.listen(4000).sockets;
 const url = "mongodb+srv://admin:admin@ng-quiz-1rfmw.mongodb.net/test";
+let questionsArray = [
+  "Does HTML compile ?",
+  ".map function is faster than .forEach function."
+];
+let questionAnswerArray = [
+  { question: "Does HTML compile ?", answer: "No" },
+  { question: ".map function is faster than .forEach function.", answer: "Yes" }
+];
 mongo.MongoClient.connect(url, (err, client) => {
   assert.equal(null, err);
   console.log("Connected successfully to server");
 
   const db = client.db("quiz");
-
+  let questionCollection = db.collection("questions");
+  let answerCollection = db.collection("answers");
+  let qaCollection = db.collection("questionanwers");
+  // qaCollection.insertMany(questionAnswerArray);
   io.on("connection", socket => {
-    let questionCollection = db.collection("questions");
-    let answerCollection = db.collection("answers");
     let sendStatus = s => {
       socket.emit("status", s);
     };
@@ -26,7 +35,8 @@ mongo.MongoClient.connect(url, (err, client) => {
         throw error;
       }
       console.log(result);
-      socket.emit("questions", result);
+      questionsArray = result[0];
+      socket.emit("questions", result[0]);
     });
 
     answerCollection
@@ -41,12 +51,16 @@ mongo.MongoClient.connect(url, (err, client) => {
       let question = data.question;
       let answer = data.answer;
       let userid = data.userid;
+      let questionIndex = data.questionIndex;
+      console.log("---" + questionAnswerArray[questionIndex].answer);
+      let isCorrect = questionAnswerArray[questionIndex].answer == answer;
       if (question && answer) {
-        answerCollection.insert(
+        answerCollection.insertOne(
           {
             question: question,
             answer: answer,
-            userid: userid
+            userid: userid,
+            isCorrect: isCorrect
           },
           () => {
             io.emit("output", [data]);
