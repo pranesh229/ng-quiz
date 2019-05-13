@@ -9,6 +9,8 @@ import {
   FormText,
   FormFeedback
 } from "reactstrap";
+import io from "socket.io-client";
+const socket = io("http://localhost:4000");
 export default class Home extends Component {
   state = {
     name: "",
@@ -47,20 +49,25 @@ export default class Home extends Component {
     );
   }
   submitYourName() {
+    let randomUserid = Math.floor(Math.random() * 10000000 + 1);
     if (this.state.name) {
       console.log(this.state.name);
       sessionStorage.setItem(
         "user",
         JSON.stringify({
           name: this.state.name,
-          userid: Math.floor(Math.random() * 10000000 + 1)
+          userid: randomUserid
         })
       );
+      socket.emit("login", {
+        userid: randomUserid
+      });
       this.props.history.push("./quiz");
     } else {
       this.setState({ invalid: true });
     }
   }
+
   onChangeInput(event) {
     this.setState({ name: event.target.value });
   }

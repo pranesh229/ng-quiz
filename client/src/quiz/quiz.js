@@ -13,6 +13,8 @@ export default class Quiz extends Component {
   };
   constructor() {
     super();
+  }
+  componentDidMount() {
     if (socket) {
       console.log("connected to socket");
       socket.on("questions", data => {
